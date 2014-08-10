@@ -21,8 +21,8 @@ object Application extends Controller {
   def newTask = Action { implicit request =>
     taskForm.bindFromRequest.fold(
       errors => BadRequest(views.html.index(Task.all(), errors)),
-      label => {
-        Task.create(label)
+      params => {
+        Task.create(params._1, params._2)
         Redirect(routes.Application.tasks)
       }
     )
@@ -33,8 +33,11 @@ object Application extends Controller {
     Redirect(routes.Application.tasks)
   }
 
-  val taskForm = Form(
-    "label" -> nonEmptyText
+  private val taskForm: Form[(String, String)] = Form(
+    tuple(
+      "label" -> nonEmptyText,
+      "meaning" -> nonEmptyText
+    )
   )
 
 }

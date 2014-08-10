@@ -8,7 +8,7 @@ import play.api.Play.current
 /**
  * Created by ishi on 2014/08/10.
  */
-case class Task(id: Long, label: String)
+case class Task(id: Long, label: String, meaning: String)
 
 object Task {
 
@@ -16,10 +16,14 @@ object Task {
     SQL("select * from task").as(task *)
   }
 
-  def create(label: String) {
+  def create(label: String, meaning: String) {
+    val params = Seq[NamedParameter](
+      'label -> label,
+      'meaning -> meaning
+    )
     DB.withConnection { implicit c =>
-      SQL("insert into task (label) values ({label})").on(
-        'label -> label
+      SQL("insert into task (label, meaning) values ({label}, {meaning})").on(
+        params:_*
       ).executeUpdate()
     }
   }
@@ -34,8 +38,9 @@ object Task {
 
   val task = {
     get[Long]("id") ~
-      get[String]("label") map {
-      case id~label => Task(id, label)
+      get[String]("label") ~
+      get[String]("meaning") map {
+      case id~label~meaning => Task(id, label, meaning)
     }
   }
 
