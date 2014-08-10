@@ -13,7 +13,7 @@ case class Task(id: Long, label: String, meaning: String)
 object Task {
 
   def all(): List[Task] = DB.withConnection { implicit c =>
-    SQL("select * from task").as(task *)
+    SQL("select * from task order by id desc").as(task *)
   }
 
   def create(label: String, meaning: String) {

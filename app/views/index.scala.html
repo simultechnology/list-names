@@ -4,29 +4,48 @@
 
 @main("Todo list") {
 
-<h1>@tasks.size task(s)</h1>
+<h1>@tasks.size words</h1>
 
-<ul>
+<table class="table table-striped table-bordered table-hover table-condensed" style="max-width: 960px; margin: auto">
+  <tr>
+    <th>単語</th>
+    <th>意味</th>
+    <th style="width: 150px;">削除</th>
+  </tr>
   @tasks.map { task =>
-  <li>
-    <div>@task.label</div>
-    <div>@task.meaning</div>
-
-    @form(routes.Application.deleteTask(task.id)) {
-    <input type="submit" value="Delete">
-    }
-  </li>
+  <tr>
+    <td>@task.label</td>
+    <td>@task.meaning</td>
+    <td>
+      @form(routes.Application.deleteTask(task.id)) {
+      <input type="submit" value="削除">
+      }
+    </td>
+  </tr>
   }
-</ul>
+</table>
 
-<h2>Add a new task</h2>
+<h2>単語登録</h2>
 
-@form(routes.Application.newTask) {
+@form(routes.Application.newTask, 'class -> "form-horizontal") {
 
-@inputText(taskForm("label"))
-@inputText(taskForm("meaning"))
-
-<input type="submit" value="Create">
+<div class="form-group">
+  <label class="control-label col-sm-2" for="label">単語</label>
+  <div class="col-sm-4">
+    <input type="text" name="label" id="label" class="form-control" placeholder="単語">
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-sm-2" for="meaning">意味</label>
+  <div class="col-sm-4">
+    <input type="text" name="meaning" id="meaning" class="form-control" placeholder="意味">
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-4">
+    <input type="submit" value="登録" class="btn btn-primary">
+  </div>
+</div>
 
 }
 
